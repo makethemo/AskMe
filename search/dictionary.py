@@ -8,7 +8,6 @@ def main(input_text):
     client_secret = data['client_secret']
     encText = urllib.parse.quote(input_text)
     url = "https://openapi.naver.com/v1/search/encyc.json?display=1&query=" + encText # json 결과
-    # url = "https://openapi.naver.com/v1/search/blog.xml?query=" + encText # xml 결과
     request = urllib.request.Request(url)
     request.add_header("X-Naver-Client-Id",client_id)
     request.add_header("X-Naver-Client-Secret",client_secret)
@@ -24,7 +23,6 @@ def main(input_text):
         result3 = re.sub('</*b>|[[]|[]]|[(]|[)]|[-]', '', result2)
         result4 = re.findall('^.*?[.]', result3)
         description = result4[0]
-        print(description)
     else:
         print("Error Code:" + rescode)
     return description
