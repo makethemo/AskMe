@@ -1,9 +1,9 @@
 import os, sys, urllib.request, json, re
 
+with open('./key.json', 'r') as data_file:
+    data = json.load(data_file)
 
 def search_keyword_by_naver_dic(input_text):
-    with open('./key.json', 'r') as data_file:
-        data = json.load(data_file)
     client_id = data['client_id']
     client_secret = data['client_secret']
     encText = urllib.parse.quote(input_text)
