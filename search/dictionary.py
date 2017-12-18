@@ -23,9 +23,11 @@ def search_keyword_by_naver_dic(input_text):
         result3 = re.sub('</*b>|[[]|[]]|[(]|[)]|[-]', '', result2)
         result4 = re.findall('^.*?[.]', result3)
         description = result4[0]
+        return description
     else:
-        print("Error Code:" + rescode)
-    return description
+        # print("Error Code:" + rescode)
+        return '해당 내용을 찾을 수 없습니다.'
+
 
 if __name__ == '__main__':
     """
