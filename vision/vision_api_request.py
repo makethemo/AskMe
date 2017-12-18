@@ -83,6 +83,13 @@ def image_label_detection(data_path):
     return label
 
 
+def image_text_detection(data_path):
+    with open('./test.json') as data_file:
+        data = json.load(data_file)
+
+    return data["responses"][0]["textAnnotations"][0]["description"]
+
+
 if __name__ == '__main__':
     local_image_path = 'local_image.jpg'    # You have to fix the image path here.
 
