@@ -91,8 +91,23 @@ def image_text_detection(data_path):
 
 
 if __name__ == '__main__':
-    local_image_path = 'local_image.jpg'    # You have to fix the image path here.
-
+    local_image_path = "./orange.jpg"    # You have to fix the image path here.
     (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
 
-    print(body.decode('utf-8'))
+    # 이렇게 하면 파일을 따로 저장해야하고
+    f = open("./test.json", 'w')
+    f.write(body.decode('utf-8'))
+    f.close()
+
+    print(image_label_detection("./test.json"))
+    """
+    with open('./test.json') as data_file:
+        data = json.load(data_file)
+    size = len(data["responses"][0]["labelAnnotations"])
+    print(data["responses"][0]["webDetection"]["webEntities"][0]["description"])  # 값 하나하나 접근하기
+    """
+
+    """ 이렇게 하면 문자 하나하나씩 접근해야돼요
+    str = body.decode('utf-8')
+    print(str)
+    """
