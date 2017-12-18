@@ -27,8 +27,16 @@ def get_response(b64encoded_image):
           },
           "features": [
             {
-              "type": "LABEL_DETECTION",
-              "maxResults": 1
+                "type": "LABEL_DETECTION",
+                "maxResults": 15
+            },
+            {
+                "type" : "TEXT_DETECTION",
+                "maxResults": 1
+            },
+            {
+                "type" : "WEB_DETECTION",
+                "maxResults": 1
             }
           ]
         }
