@@ -1,5 +1,5 @@
 import os, sys, urllib.request, json, re
-global keyword
+
 
 def search_keyword_by_naver_dic(input_text):
     with open('./key.json', 'r') as data_file:
@@ -28,4 +28,7 @@ def search_keyword_by_naver_dic(input_text):
     return description
 
 if __name__ == '__main__':
-    search_keyword_by_naver_dic(keyword)
+    """
+    테스트 코드
+    """
+    search_keyword_by_naver_dic('백과사전')
