@@ -49,9 +49,7 @@ def get_response(b64encoded_image):
     return headers, body
 
 
-def image_label_detection(label_data):
-    with open('./test.json') as data_file:
-        data = json.load(data_file)
+def image_label_detection(data):
     label = []
     score = []
     length = len(data["responses"][0]["labelAnnotations"])
@@ -83,10 +81,7 @@ def image_label_detection(label_data):
     return label
 
 
-def image_text_detection(text_data):
-    with open('./test.json') as data_file:
-        data = json.load(data_file)
-
+def image_text_detection(data):
     return data["responses"][0]["textAnnotations"][0]["description"]
 
 
