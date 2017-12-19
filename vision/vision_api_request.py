@@ -48,8 +48,8 @@ def get_response(b64encoded_image):
     (headers, body) = http.request(req_url, 'POST', body=json.dumps(req_body), headers=req_headers)
     return headers, body
 
-"""
-def image_label_detection(data_path):
+
+def image_label_detection(label_data):
     with open('./test.json') as data_file:
         data = json.load(data_file)
     label = []
@@ -83,26 +83,20 @@ def image_label_detection(data_path):
     return label
 
 
-def image_text_detection(data_path):
+def image_text_detection(text_data):
     with open('./test.json') as data_file:
         data = json.load(data_file)
 
     return data["responses"][0]["textAnnotations"][0]["description"]
-"""
+
 
 if __name__ == '__main__':
     local_image_path = "./orange.jpg"    # You have to fix the image path here.
     (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
 
-    """
-    f = open("./test.json", 'w')
-    f.write(body.decode('utf-8'))
-    f.close()
+    data = json.loads(body.decode('utf-8'))
+    image_label_detection(data)
 
-    print(image_label_detection("./test.json"))
-    """
-    with open(body.decode('utf-8')) as data_file:
-        data = json.load(data_file)
-    # size = len(data["responses"][0]["labelAnnotations"])
-    # print(data["responses"][0]["webDetection"]["webEntities"][0]["description"])  # 값 하나하나 접근하기
-    print(data)
+    image_text_detection(data)
+
+    print(data["responses"][0]["labelAnnotations"][0]["description"])
