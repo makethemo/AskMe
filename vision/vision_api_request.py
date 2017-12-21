@@ -19,7 +19,7 @@ def encode_image(image_path, charset):
 def get_response(b64encoded_image):
     with open(app.KEY_PATH, 'r') as jsonFile:    # local API key store
         key = json.load(jsonFile)
-        req_url = base_url + key['api-key']
+        req_url = base_url + key['vision_api-key']
 
     req_body = {
       "requests": [
