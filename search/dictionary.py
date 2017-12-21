@@ -1,7 +1,10 @@
 import os, sys, urllib.request, json, re
 
-with open('./key.json', 'r') as data_file:
+import app
+
+with open(app.KEY_PATH, 'r') as data_file:
     data = json.load(data_file)
+
 
 def search_keyword_by_naver_dic(input_text):
     client_id = data['client_id']
