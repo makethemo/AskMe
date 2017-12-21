@@ -87,6 +87,18 @@ def image_text_detection(data):
     return data["responses"][0]["textAnnotations"][0]["description"]
 
 
+def get_label(local_image_path):
+    (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
+    data = json.loads(body.decode('utf-8'))
+    return image_label_detection(data)
+
+
+def get_text(local_image_path):
+    (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
+    data = json.loads(body.decode('utf-8'))
+    return image_text_detection(data)
+
+
 if __name__ == '__main__':
     local_image_path = "./orange.jpg"    # You have to fix the image path here.
     (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
