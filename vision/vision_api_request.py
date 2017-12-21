@@ -8,6 +8,10 @@ http = httplib2.Http()
 
 base_url = 'https://vision.googleapis.com/v1/images:annotate?key='
 
+with open(app.KEY_PATH, 'r') as jsonFile:  # local API key store
+    key = json.load(jsonFile)
+    req_url = base_url + key['vision_api-key']
+
 
 def encode_image(image_path, charset):
     with open(image_path, 'rb') as image:
@@ -17,10 +21,6 @@ def encode_image(image_path, charset):
 
 
 def get_response(b64encoded_image):
-    with open(app.KEY_PATH, 'r') as jsonFile:    # local API key store
-        key = json.load(jsonFile)
-        req_url = base_url + key['vision_api-key']
-
     req_body = {
       "requests": [
         {
