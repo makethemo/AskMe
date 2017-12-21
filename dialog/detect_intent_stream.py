@@ -1,4 +1,7 @@
 import dialogflow
+from camera import camera
+from vision import vision_api_request
+from search import dictionary
 
 
 def detect_intent_stream(project_id, session_id, audio_file_path, language_code):
@@ -37,12 +40,28 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
 
     query_result = response.query_result
 
+    intent_name = format(query_result.intent.display_name)
+
     print('=' * 20)
     print('Query text: {}'.format(query_result.query_text))
-    print('Detected intent: {} (confidence: {})\n'.format(
-        query_result.intent.display_name,
-        query_result.intent_detection_confidence))
+    print('Detected intent: {} (confidence: {})\n'.format(query_result.intent.display_name, query_result.intent_detection_confidence))
     print('Fulfillment text: {}\n'.format(query_result.fulfillment_text))
+
+    if intent_name == "picture":
+        camera.take_a_picture()
+
+    if intent_name == "what":
+        picture = camera.take_a_picture()  # 사진 찍기
+        labels = vision_api_request.get_label(picture)  # vision에 사진 전송
+        # TODO labels list를 문장화 시켜서 리턴.
+
+    if intent_name == "search":
+        return dictionary.search_keyword_by_naver_dic(query_result.fulfillment_text)
+
+    if intent_name == "weather":
+        pass
+
+    return intent_name
 
 
 if __name__ == '__main__':
