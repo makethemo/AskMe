@@ -57,9 +57,6 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     print('d:{}\n'.format(query_result.))
 
 
-    def input_audio(input_audio_path)
-
-
     if intent_name == "picture":
         camera.take_a_picture()
 
@@ -83,7 +80,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         return dictionary.search_keyword_by_naver_dic(key_word)
 
     if intent_name == "weather":
-        city =
+        city =  
         county =
         village =
         request_weather.requestCurrentWeather(city, county, village)
@@ -96,4 +93,4 @@ def talk_to_dialogflow(local_voice_path):
 
 
 if __name__ == '__main__':
-    detect_intent_stream('', '< client_access_token >', '< audio_file_path >', 'ko')
+    detect_intent_stream(dialog_project_id, dialog_session_id, '< audio_file_path >', 'ko')
