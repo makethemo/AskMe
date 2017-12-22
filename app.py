@@ -2,6 +2,7 @@ from time import sleep, perf_counter
 import RPi.GPIO as GPIO
 import os
 
+from dialog.detect_intent_stream import talk_to_dialogflow
 from speech.recorder import get_recorder
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -51,6 +52,6 @@ if __name__ == '__main__':
 
                 filename = new_filename()
                 rec.save(filename)
-                # TODO call dialogflow
+                talk_to_dialogflow(filename)
     except:
         GPIO.cleanup()
