@@ -4,8 +4,12 @@ from search import dictionary
 from weather import request_weather
 import dialogflow
 import json
+import httplib2
 
+from translate.papago import english_to_korean
 import path
+
+http = httplib2.Http()
 
 with open(path.KEY_PATH, 'r') as key_file:
     key = json.load(key_file)
@@ -54,7 +58,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     print('Query text: {}'.format(query_result.query_text))
     print('Detected intent: {} (confidence: {})\n'.format(query_result.intent.display_name, query_result.intent_detection_confidence))
     print('Fulfillment text: {}\n'.format(query_result.fulfillment_text))
-    print('d:{}\n'.format(query_result))
+    # print('d:{}\n'.format(query_result))
 
 
     if intent_name == "picture":
@@ -66,35 +70,41 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     if intent_name == "sight":
         picture = camera.take_a_picture()  # 사진 찍기
         labels = vision_api_request.get_label(picture)  # vision에 사진 전송
+        print('labels: ', labels)
         # TODO labels list를 문장화 시켜서 리턴.
+        """
         for i in range(len(labels)):  # vision에서 추출된 n개의 lables
             if i != len(labels) -1:
                 label_str = label_str + labels[i] + ", "
             else:
                 label_str = label_str + labels[i]
                 label_str = label_str + "있습니다."
-        return label_str
+        """
+        
+        for i in range(len(labels)):
+            labels[i] = json.loads(english_to_korean(labels[i]))['message']['result']['translatedText']
+
+        print('translated labels:', labels)
+        result = ' '.join(labels) +  "있습니다."
+        print(result)
+        return result
 
     if intent_name == "search":
         key_word = query_result.fulfillment_text
         return dictionary.search_keyword_by_naver_dic(key_word)
-
+    
     if intent_name == "c-weather":
-        city =  
-        county =
-        village =
-        request_weather.requestCurrentWeather(city, county, village)
-
-    return intent_name
-
+        return request_weather.requestCurrentWeather('대전','대덕구', '중리동')
+    
+    """
     req_headers = {"Content-Type": "application/json; charset=utf-8"}
 
     (headers, body) = http.request(req_url, 'POST', body=json.dumps(req_body), headers=req_headers)
-    return headers, body
+    return body.decode('utf-8')
+    """
 
 def talk_to_dialogflow(local_voice_path):
-    (headers, body) = detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')
-    return json.loads(body.decode('utf-8'))
+    return detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')
 
 if __name__ == '__main__':
     (headers, body) = detect_intent_stream(dialog_project_id, dialog_session_id, '< audio_file_path >', 'ko')
