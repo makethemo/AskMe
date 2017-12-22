@@ -79,24 +79,15 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         key_word = query_result.fulfillment_text
         return dictionary.search_keyword_by_naver_dic(key_word)
 
-<<<<<<< HEAD
-"""
-    if intent_name == "weather":
-=======
     if intent_name == "c-weather":
->>>>>>> Fix intents
         city =  
         county =
         village =
         request_weather.requestCurrentWeather(city, county, village)
 
     return intent_name
-<<<<<<< HEAD
-"""
-=======
 
     req_headers = {"Content-Type": "application/json; charset=utf-8"}
->>>>>>> Fix intents
 
     (headers, body) = http.request(req_url, 'POST', body=json.dumps(req_body), headers=req_headers)
     return headers, body
