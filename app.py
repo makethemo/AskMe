@@ -1,6 +1,9 @@
 from time import sleep, perf_counter
 import RPi.GPIO as GPIO
 
+import pyaudio
+import wave
+
 from dialog.detect_intent_stream import talk_to_dialogflow
 from speech.recorder import Recorder
 
@@ -14,13 +17,23 @@ if __name__ == '__main__':
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(24, GPIO.OUT)
-    
-    rec = Recorder()
-    rec.initialize()
+
+    # rec = Recorder()
+    # rec.initialize()
 
     start_time = 0
     pushed = False
     is_recording = False
+
+
+    CHUNK = 1024
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 1
+    RATE = 16000
+    RECORD_SECONDS = 4
+    WAVE_OUTPUT_FILENAME = "output.wav"
+
+    p = pyaudio.PyAudio()
 
     try:
         while True:
@@ -29,34 +42,50 @@ if __name__ == '__main__':
                 GPIO.output(24, True)  # LED on
                 print('Button pressed...')
 
-                if not pushed:
-                    start_time = perf_counter()
-                    pushed = True
-                    rec.start_recording()
-                    is_recording = True
+                if not is_recording:
+                    stream = p.open(format=FORMAT,
+                                   channels=CHANNELS,
+                                    rate=RATE,
+                                    input=True,
+                                    frames_per_buffer=CHUNK)
+
+                    print("* recording")
+
+                    frames = []
+
+                    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+                            data = stream.read(CHUNK)
+                            frames.append(data)
+
+                    print("* done recording")
+
+                    stream.stop_stream()
+                    stream.close()
+                    # p.terminate()
+
+                    filename = new_filename()
+
+                    wf = wave.open(filename, 'wb')
+                    wf.setnchannels(CHANNELS)
+                    wf.setsampwidth(p.get_sample_size(FORMAT))
+                    wf.setframerate(RATE)
+                    wf.writeframes(b''.join(frames))
+                    wf.close()
+                    
+                    talk_to_dialogflow(filename)
+
+                    is_recording = False
 
                 sleep(0.2)
             else:
                 GPIO.output(24, False)  # LED off
-                print('debug-01')
-                if not is_recording:
-                    sleep(0.2)
-                    print('Is not recording...')
-                    continue
-
-                print('debug-02')
-                rec.stop_recording()
-                is_recording = False
-
                 pushed = False
-                if perf_counter() - start_time < 2:
-                    rec.clear()
-                    continue
 
-                filename = new_filename()
-                rec.save(filename)
-                print(talk_to_dialogflow(filename))
     except Exception as e:
+        p.terminate()
         GPIO.cleanup()
         print(e)
+
+    p.terminate()
+    GPIO.cleanup()
 
