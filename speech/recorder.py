@@ -13,10 +13,8 @@ def get_recorder():
     frames = []
     pause = False
 
-
-    def init():
+    def initialize():
         p = pyaudio.PyAudio()
-
 
     def start_recording():
         pause = False
@@ -32,7 +30,6 @@ def get_recorder():
             data = stream.read(CHUNK)
             frames.append(data) # 2 bytes(16 bits) per channel
 
-
     def stop_recording():
         pause = True
         print("* done recording")
@@ -41,10 +38,8 @@ def get_recorder():
         stream.close()
         p.terminate()
 
-
     def clear():
         del frames[:]
-
 
     def save(filepath):
         if len(frames):

@@ -16,7 +16,7 @@ if __name__ == '__main__':
     GPIO.setup(24, GPIO.OUT)
     
     rec = get_recorder()
-    rec.init()
+    rec.initialize()
 
     start_time = 0
     pushed = False
