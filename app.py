@@ -2,7 +2,7 @@ from time import sleep, perf_counter
 import RPi.GPIO as GPIO
 
 from dialog.detect_intent_stream import talk_to_dialogflow
-from speech.recorder import get_recorder
+from speech.recorder import Recorder
 
 
 def new_filename():
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(24, GPIO.OUT)
     
-    rec = get_recorder()
+    rec = Recorder()
     rec.initialize()
 
     start_time = 0
