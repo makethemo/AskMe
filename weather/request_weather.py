@@ -34,13 +34,13 @@ def requestCurrentWeather(city, county, village, isHourly=True):
 
 
 def hourly(weather):  # 현재 날씨(시간별)
-    temperature_tmax = int(weather['temperature']['tmax'])  # 오늘의 최고기온
-    temperature_tc = int(weather['temperature']['tc'])  # 1시간 현재기온
-    temperature_tmin = int(weather['temperature']['tmin'])  # 오늘의 최저기온
+    temperature_tmax = weather['temperature']['tmax']  # 오늘의 최고기온
+    temperature_tc = weather['temperature']['tc']  # 1시간 현재기온
+    temperature_tmin = weather['temperature']['tmin']  # 오늘의 최저기온
     sky_name = weather['sky']['name']  # 하늘상태
 
-    str = time + '시 기준으로 온도는 ' + temperature_tc + '도 이고, 최고 ' + temperature_tmax + '도, 최저' + temperature_tmin + '도, 하늘상태는 ' + sky_name + '입니다.'
-    return str
+    result = time + '시 기준으로 온도는 ' + temperature_tc + '도 이고, 최고 ' + temperature_tmax + '도, 최저' + temperature_tmin + '도, 하늘상태는 ' + sky_name + '입니다.'
+    return result
 
 
 if __name__ == '__main__':
