@@ -3,9 +3,14 @@ import RPi.GPIO as GPIO
 
 import pyaudio
 import wave
+import path
+import os
 
 from dialog.detect_intent_stream import talk_to_dialogflow
 from speech.recorder import Recorder
+from speech.clova import tts
+
+import vlc
 
 
 def new_filename():
@@ -31,7 +36,6 @@ if __name__ == '__main__':
     CHANNELS = 1
     RATE = 16000
     RECORD_SECONDS = 4
-    WAVE_OUTPUT_FILENAME = "output.wav"
 
     p = pyaudio.PyAudio()
 
@@ -63,7 +67,8 @@ if __name__ == '__main__':
                     stream.close()
                     # p.terminate()
 
-                    filename = new_filename()
+                    filename = os.path.join(path.MIC_DIR, new_filename())
+
 
                     wf = wave.open(filename, 'wb')
                     wf.setnchannels(CHANNELS)
@@ -72,7 +77,9 @@ if __name__ == '__main__':
                     wf.writeframes(b''.join(frames))
                     wf.close()
                     
-                    talk_to_dialogflow(filename)
+
+                    player = vlc.MediaPlayer(tts(talk_to_dialogflow(filename)))
+                    player.play()
 
                     is_recording = False
 
