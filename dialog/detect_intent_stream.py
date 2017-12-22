@@ -2,7 +2,7 @@ import dialogflow
 from camera import camera
 from vision import vision_api_request
 from search import dictionary
-
+from weather import request_weather
 
 def detect_intent_stream(project_id, session_id, audio_file_path, language_code):
 
@@ -46,23 +46,42 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     print('Query text: {}'.format(query_result.query_text))
     print('Detected intent: {} (confidence: {})\n'.format(query_result.intent.display_name, query_result.intent_detection_confidence))
     print('Fulfillment text: {}\n'.format(query_result.fulfillment_text))
+    print('d:{}\n'.format(query_result.))
+
+
+    def input_audio(input_audio_path)
+
 
     if intent_name == "picture":
         camera.take_a_picture()
+
+    if intent_name == "video":
+        camera.take_a_video(10)
 
     if intent_name == "what":
         picture = camera.take_a_picture()  # 사진 찍기
         labels = vision_api_request.get_label(picture)  # vision에 사진 전송
         # TODO labels list를 문장화 시켜서 리턴.
+        for i in range(len(labels)):  # vision에서 추출된 n개의 lables
+            if i != len(labels) -1:
+                label_str = label_str + labels[i] + ", "
+            else:
+                label_str = label_str + labels[i]
+                label_str = label_str + "있습니다."
+        return label_str
 
     if intent_name == "search":
-        return dictionary.search_keyword_by_naver_dic(query_result.fulfillment_text)
+        key_word = query_result.fulfillment_text
+        return dictionary.search_keyword_by_naver_dic(key_word)
 
     if intent_name == "weather":
-        pass
+        city =
+        county =
+        village =
+        request_weather.requestCurrentWeather(city, county, village)
 
     return intent_name
 
 
 if __name__ == '__main__':
-    detect_intent_stream('< project_id >', '< client_access_token >', '< audio_file_path >', '< language_code >')
+    detect_intent_stream('', '< client_access_token >', '< audio_file_path >', 'ko')
