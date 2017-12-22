@@ -63,7 +63,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     if intent_name == "video":
         camera.take_a_video(10)
 
-    if intent_name == "what":
+    if intent_name == "sight":
         picture = camera.take_a_picture()  # 사진 찍기
         labels = vision_api_request.get_label(picture)  # vision에 사진 전송
         # TODO labels list를 문장화 시켜서 리턴.
@@ -79,19 +79,31 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         key_word = query_result.fulfillment_text
         return dictionary.search_keyword_by_naver_dic(key_word)
 
+<<<<<<< HEAD
 """
     if intent_name == "weather":
+=======
+    if intent_name == "c-weather":
+>>>>>>> Fix intents
         city =  
         county =
         village =
         request_weather.requestCurrentWeather(city, county, village)
 
     return intent_name
+<<<<<<< HEAD
 """
+=======
+
+    req_headers = {"Content-Type": "application/json; charset=utf-8"}
+>>>>>>> Fix intents
+
+    (headers, body) = http.request(req_url, 'POST', body=json.dumps(req_body), headers=req_headers)
+    return headers, body
 
 def talk_to_dialogflow(local_voice_path):
-    return detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')
-
+    (headers, body) = detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')
+    return json.loads(body.decode('utf-8'))
 
 if __name__ == '__main__':
-    detect_intent_stream(dialog_project_id, dialog_session_id, '< audio_file_path >', 'ko')
+    (headers, body) = detect_intent_stream(dialog_project_id, dialog_session_id, '< audio_file_path >', 'ko')
