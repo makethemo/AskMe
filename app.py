@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, perf_counter
 import RPi.GPIO as GPIO
 import os
 
@@ -23,23 +23,34 @@ if __name__ == '__main__':
     
     rec = get_recorder()
     rec.init()
-    
-    # TODO: time count
+
+    start_time = 0
+    pushed = False
 
     try:
         while True:
             button_state = GPIO.input(18)
-            if button_state == False:
+            if not button_state:
                 GPIO.output(24, True)  # LED on
                 # print('Button pressed...')
-                rec.start_recording()
+
+                if not pushed:
+                    start_time = perf_counter()
+                    pushed = True
+                    rec.start_recording()
+
                 sleep(0.2)
             else:
                 GPIO.output(24, False)  # LED off
                 rec.stop_recording()
+
+                pushed = False
+                if perf_counter() - start_time < 2:
+                    rec.clear()
+                    continue
+
                 filename = new_filename()
                 rec.save(filename)
                 # TODO call dialogflow
     except:
         GPIO.cleanup()
-
