@@ -2,13 +2,13 @@ from base64 import b64encode
 import httplib2
 import json
 
-import app
+import path
 
 http = httplib2.Http()
 
 base_url = 'https://vision.googleapis.com/v1/images:annotate?key='
 
-with open(app.KEY_PATH, 'r') as jsonFile:  # local API key store
+with open(path.KEY_PATH, 'r') as jsonFile:  # local API key store
     key = json.load(jsonFile)
     req_url = base_url + key['vision_api-key']
 

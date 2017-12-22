@@ -5,9 +5,9 @@ from weather import request_weather
 import dialogflow
 import json
 
-import app
+import path
 
-with open(app.KEY_PATH, 'r') as key_file:
+with open(path.KEY_PATH, 'r') as key_file:
     key = json.load(key_file)
     dialog_project_id = key['dialog_project_ID']
     dialog_session_id = key['dialog_session_ID']
@@ -54,7 +54,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     print('Query text: {}'.format(query_result.query_text))
     print('Detected intent: {} (confidence: {})\n'.format(query_result.intent.display_name, query_result.intent_detection_confidence))
     print('Fulfillment text: {}\n'.format(query_result.fulfillment_text))
-    print('d:{}\n'.format(query_result.))
+    print('d:{}\n'.format(query_result))
 
 
     if intent_name == "picture":
@@ -79,6 +79,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         key_word = query_result.fulfillment_text
         return dictionary.search_keyword_by_naver_dic(key_word)
 
+"""
     if intent_name == "weather":
         city =  
         county =
@@ -86,7 +87,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         request_weather.requestCurrentWeather(city, county, village)
 
     return intent_name
-
+"""
 
 def talk_to_dialogflow(local_voice_path):
     return detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')

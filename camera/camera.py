@@ -3,7 +3,7 @@ import picamera
 import datetime  # 시스템 시간 가져오기 위한
 import os
 
-import app
+import path
 
 camera = picamera.PiCamera()
 camera.vflip = True
@@ -25,13 +25,13 @@ def stop_preview():
 
 def take_a_picture():
     file_name = get_time_for_filename() + '.jpg'
-    camera.capture(os.path.join(app.PICTURES_DIR, file_name))  # 시스템 시간
+    camera.capture(os.path.join(path.PICTURES_DIR, file_name))  # 시스템 시간
     return file_name
 
 
 def take_a_video(seconds):
     file_name = get_time_for_filename() + '.h264'
-    camera.start_recording(os.path.join(app.PICTURES_DIR, file_name))
+    camera.start_recording(os.path.join(path.PICTURES_DIR, file_name))
     sleep(seconds)
     camera.stop_recording()
     return file_name

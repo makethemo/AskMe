@@ -4,13 +4,13 @@ import urllib
 import json
 import os
 
-import app
+import path
 
 http = httplib2.Http()
 req_url = "https://openapi.naver.com/v1/voice/tts.bin"
-error_file = os.path.join(app.TTS_DIR, 'error.mp3')
+error_file = os.path.join(path.TTS_DIR, 'error.mp3')
 
-with open(app.KEY_PATH, 'r') as jsonFile:  # local API key store
+with open(path.KEY_PATH, 'r') as jsonFile:  # local API key store
     key = json.load(jsonFile)
     req_headers = {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -24,7 +24,7 @@ def get_time_for_filename():
 
 
 def new_filename():
-    return os.path.join(app.TTS_DIR, get_time_for_filename() + '.mp3')
+    return os.path.join(path.TTS_DIR, get_time_for_filename() + '.mp3')
 
 
 def tts(text):

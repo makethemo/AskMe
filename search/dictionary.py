@@ -1,8 +1,8 @@
 import urllib.request, json, re
 
-import app
+import path
 
-with open(app.KEY_PATH, 'r') as data_file:
+with open(path.KEY_PATH, 'r') as data_file:
     data = json.load(data_file)
 
 

@@ -1,9 +1,10 @@
 import requests
 import datetime
 import json
-import app
 
-with open(app.KEY_PATH, 'r') as jsonFile:  # local API key store
+import path
+
+with open(path.KEY_PATH, 'r') as jsonFile:  # local API key store
     key = json.load(jsonFile)
 
 url_hourly = "http://apis.skplanetx.com/weather/current/hourly"

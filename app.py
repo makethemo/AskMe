@@ -1,15 +1,8 @@
 from time import sleep, perf_counter
 import RPi.GPIO as GPIO
-import os
 
 from dialog.detect_intent_stream import talk_to_dialogflow
 from speech.recorder import get_recorder
-
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-TTS_DIR = os.path.join(os.path.join(ROOT_DIR, 'speech'), '.tts')
-MIC_DIR = os.path.join(ROOT_DIR, '.mic')
-PICTURES_DIR = os.path.join(ROOT_DIR, '.pictures')
-KEY_PATH = os.path.join(ROOT_DIR, 'key.json')
 
 
 def new_filename():

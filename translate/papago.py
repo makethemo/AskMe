@@ -1,6 +1,8 @@
 import urllib.request
 
-with open('./key.json', 'r') as key:
+import path
+
+with open(path.KEY_PATH, 'r') as key:
     client_id = key['papago_client_id']
     client_secret = key['papago_client_secret']
 
