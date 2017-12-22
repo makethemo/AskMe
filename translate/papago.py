@@ -6,23 +6,19 @@ with open(path.KEY_PATH, 'r') as key:
     client_id = key['papago_client_id']
     client_secret = key['papago_client_secret']
 
-encText = urllib.parse.quote("Tree")
-data = "source=en&target=ko&text=" + encText
-url = "https://openapi.naver.com/v1/language/translate"
 
-request = urllib.request.Request(url)
-request.add_header("X-Naver-Client-Id", client_id)
-request.add_header("X-Naver-Client-Secret", client_secret)
-response = urllib.request.urlopen(request, data=data.encode("utf-8"))
-rescode = response.getcode()
+def english_to_korean(text):
+    encText = urllib.parse.quote(text)
+    data = "source=en&target=ko&text=" + encText
+    url = "https://openapi.naver.com/v1/language/translate"
 
-
-def english_to_korean(encText):
-    print("번역된 한글입니다 : %s" %encText)
-    if encText:
-        print ("나무")
-
+    request = urllib.request.Request(url)
+    request.add_header("X-Naver-Client-Id", client_id)
+    request.add_header("X-Naver-Client-Secret", client_secret)
+    response = urllib.request.urlopen(request, data=data.encode("utf-8"))
+    rescode = response.getcode()
+    if rescode == 200:
+        response_body = response.read()
+        return response_body.decode('utf-8')
     else:
-        print("Error Code:" + rescode)
-
-    return
+        return '다시 한번 말씀해주세요.'
