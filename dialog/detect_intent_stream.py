@@ -1,8 +1,16 @@
-import dialogflow
 from camera import camera
 from vision import vision_api_request
 from search import dictionary
 from weather import request_weather
+import dialogflow
+import json
+
+import app
+
+with open(app.KEY_PATH, 'r') as key_file:
+    key = json.load(key_file)
+    dialog_project_id = key['dialog_project_ID']
+    dialog_session_id = key['dialog_session_ID']
 
 def detect_intent_stream(project_id, session_id, audio_file_path, language_code):
 
@@ -81,6 +89,10 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         request_weather.requestCurrentWeather(city, county, village)
 
     return intent_name
+
+
+def talk_to_dialogflow(local_voice_path):
+    return detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')
 
 
 if __name__ == '__main__':
