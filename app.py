@@ -20,6 +20,7 @@ if __name__ == '__main__':
 
     start_time = 0
     pushed = False
+    is_recording = False
 
     try:
         while True:
@@ -32,11 +33,16 @@ if __name__ == '__main__':
                     start_time = perf_counter()
                     pushed = True
                     rec.start_recording()
+                    is_recording = True
 
                 sleep(0.2)
             else:
                 GPIO.output(24, False)  # LED off
+                if not is_recording:
+                    continue
+
                 rec.stop_recording()
+                is_recording = False
 
                 pushed = False
                 if perf_counter() - start_time < 2:
