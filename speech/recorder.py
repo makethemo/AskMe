@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+from time import sleep
 import pyaudio
 import wave
 
-CHUNK = 1024
+CHUNK = 512
 FORMAT = pyaudio.paInt16  # paInt8
 CHANNELS = 1
 RATE = 16000  # sample rate
@@ -28,10 +29,15 @@ class Recorder:
                                   frames_per_buffer=CHUNK)  # buffer
 
         print("* recording")
+        
+        try:
+            while not self.pause:
+                data = self.stream.read(CHUNK)
+                self.frames.append(data) # 2 bytes(16 bits) per channel
+                sleep(0.1)
+        except Exception as e:
+            print(e)
 
-        while not self.pause:
-            data = self.stream.read(CHUNK)
-            self.frames.append(data) # 2 bytes(16 bits) per channel
 
     def stop_recording(self):
         self.pause = True

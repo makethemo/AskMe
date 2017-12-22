@@ -27,7 +27,7 @@ if __name__ == '__main__':
             button_state = GPIO.input(18)
             if not button_state:
                 GPIO.output(24, True)  # LED on
-                # print('Button pressed...')
+                print('Button pressed...')
 
                 if not pushed:
                     start_time = perf_counter()
@@ -38,9 +38,13 @@ if __name__ == '__main__':
                 sleep(0.2)
             else:
                 GPIO.output(24, False)  # LED off
+                print('debug-01')
                 if not is_recording:
+                    sleep(0.2)
+                    print('Is not recording...')
                     continue
 
+                print('debug-02')
                 rec.stop_recording()
                 is_recording = False
 
@@ -51,6 +55,8 @@ if __name__ == '__main__':
 
                 filename = new_filename()
                 rec.save(filename)
-                talk_to_dialogflow(filename)
-    except:
+                print(talk_to_dialogflow(filename))
+    except Exception as e:
         GPIO.cleanup()
+        print(e)
+
