@@ -27,7 +27,7 @@ def take_a_picture():
     file_name = get_time_for_filename() + '.jpg'
     file_path = os.path.join(path.PICTURES_DIR, file_name)
     camera.capture(file_path)  # 시스템 시간
-    return file_name
+    return file_path
 
 
 def take_a_video(seconds):
@@ -36,4 +36,4 @@ def take_a_video(seconds):
     camera.start_recording(file_path)
     sleep(seconds)
     camera.stop_recording()
-    return file_name
+    return file_path
