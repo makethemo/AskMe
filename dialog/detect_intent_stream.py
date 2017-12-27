@@ -16,7 +16,7 @@ with open(path.KEY_PATH, 'r') as key_file:
     dialog_project_id = key['dialog_project_ID']
     dialog_session_id = key['dialog_session_ID']
 
-def detect_intent_stream(project_id, session_id, audio_file_path, language_code):
+def detect_intent_stream(project_id, session_id, audio_file_path, language_code):  # dialogflow intent에 접근
 
     session_client = dialogflow.SessionsClient()
     audio_encoding = dialogflow.enums.AudioEncoding.AUDIO_ENCODING_LINEAR_16
@@ -25,13 +25,13 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     session = session_client.session_path(project_id, session_id)
     print('Session path: {}\n'.format(session))
 
-    def request_generator(audio_config, audio_file_path):
+    def request_generator(audio_config, audio_file_path):  # 지정된경로의 음성파일에서 질문 의도 추출
         query_input = dialogflow.types.QueryInput(audio_config=audio_config)
 
         yield dialogflow.types.StreamingDetectIntentRequest(
             session=session, query_input=query_input)
 
-        with open(audio_file_path, 'rb') as audio_file:
+        with open(audio_file_path, 'rb') as audio_file:  # 작은 덩어리단위로 쪼개어 인식 후 문장완성
             while True:
                 chunk = audio_file.read(4096)
                 if not chunk:
@@ -61,13 +61,13 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     # print('d:{}\n'.format(query_result))
 
 
-    if intent_name == "picture":
+    if intent_name == "picture":  # 사진찍기
         camera.take_a_picture()
 
-    if intent_name == "video":
+    if intent_name == "video":  # 비디오찍기
         camera.take_a_video(10)
 
-    if intent_name == "sight":
+    if intent_name == "sight":  # "앞에 뭐가있어"에 대한 응답을 리턴
         picture = camera.take_a_picture()  # 사진 찍기
         labels = vision_api_request.get_label(picture)  # vision에 사진 전송
         print('labels: ', labels)
@@ -81,7 +81,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
                 label_str = label_str + "있습니다."
         """
         
-        for i in range(len(labels)):
+        for i in range(len(labels)):  # vision에서 넘어온 단어의 개수만큼 출력
             labels[i] = json.loads(english_to_korean(labels[i]))['message']['result']['translatedText']
 
         print('translated labels:', labels)
@@ -89,11 +89,11 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
         print(result)
         return result
 
-    if intent_name == "search":
+    if intent_name == "search":  # "검색해봐" 에 대한 응답을 인터넷에서 찾아 리턴
         key_word = query_result.fulfillment_text
         return dictionary.search_keyword_by_naver_dic(key_word)
     
-    if intent_name == "c-weather":
+    if intent_name == "c-weather":  # 날씨를 weather api를 통해 얻어서 리턴
         return request_weather.requestCurrentWeather('대전','대덕구', '중리동')
     
     """
@@ -103,7 +103,7 @@ def detect_intent_stream(project_id, session_id, audio_file_path, language_code)
     return body.decode('utf-8')
     """
 
-def talk_to_dialogflow(local_voice_path):
+def talk_to_dialogflow(local_voice_path):  # dialogflow
     return detect_intent_stream(dialog_project_id, dialog_session_id, local_voice_path, 'ko')
 
 if __name__ == '__main__':
