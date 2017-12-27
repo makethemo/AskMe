@@ -8,14 +8,14 @@ import path
 with open(path.KEY_PATH, 'r') as jsonFile:  # local API key store
     key = json.load(jsonFile)
 
-url_hourly = "http://apis.skplanetx.com/weather/current/hourly"
+url_hourly = "http://apis.skplanetx.com/weather/current/hourly"  # URL
 
 headers = {'Content-Type': 'application/json; charset=utf-8', 'appKey': key['weather_app_key']}
 
 time = datetime.datetime.now().strftime('%H')  # 시스템 시간
 
 
-def requestCurrentWeather(city, county, village, isHourly=True):
+def request_current_weather(city, county, village, isHourly=True):  # 지역에 따른 날씨
     params = { "version": "1",
                 "city": city,
                 "county": county,
@@ -24,7 +24,7 @@ def requestCurrentWeather(city, county, village, isHourly=True):
         response = requests.get(url_hourly, params=params, headers=headers)
 
     if response.status_code == 200:
-        response_body = response.json()
+        response_body = response.json()  # 응답에 성공시 json파일로
 
         if isHourly:  # 날씨 정보
             weather_data = response_body['weather']['hourly'][0]
@@ -45,4 +45,4 @@ def hourly(weather):  # 현재 날씨(시간별)
 
 if __name__ == '__main__':
     # requestCurrentWeather('city', 'county', 'village')
-    print(requestCurrentWeather('서울', '강남구', '논현동'))
+    print(request_current_weather('서울', '강남구', '논현동'))
