@@ -14,8 +14,8 @@ with open(path.KEY_PATH, 'r') as jsonFile:  # local API key store
 
 
 """
-ÀÌ¹ÌÁö¸¦ À¥À¸·Î Àü¼ÛÇÏ±â À§ÇØ ¹ÙÀÌÆ® ÄÚµå·Î º¯È¯
-""" 
+ì´ë¯¸ì§€ë¥¼ ì›¹ìœ¼ë¡œ ì „ì†¡í•˜ê¸° ìœ„í•´ ë°”ì´íŠ¸ ì½”ë“œë¡œ ë³€í™˜
+"""
 def encode_image(image_path, charset):
     with open(image_path, 'rb') as image:
         b64_img = b64encode(image.read())
@@ -24,8 +24,8 @@ def encode_image(image_path, charset):
 
 
 """
-ÀÀ´ä¹ŞÀ» json¿ä¼ÒÀÇ typeÀ» ÁöÁ¤
-À¥À¸·ÎºÎÅÍ Àü¼Û¹ŞÀº ÄÚµå(req_body)¸¦ json ¹®ÀÚ¿­·Î ÀÎÄÚµù
+ì‘ë‹µë°›ì„ jsonìš”ì†Œì˜ typeì„ ì§€ì •
+ì›¹ìœ¼ë¡œë¶€í„° ì „ì†¡ë°›ì€ ì½”ë“œ(req_body)ë¥¼ json ë¬¸ìì—´ë¡œ ì¸ì½”ë”©
 """ 
 def get_response(b64encoded_image):
     req_body = {
@@ -59,12 +59,12 @@ def get_response(b64encoded_image):
 
 
 """
-ÀÌ¹ÌÁö¿¡¼­ ´ë»óÀ» ÀÎ½ÄÇÏ°íÀÚ ÇÏ´Â °æ¿ì
-¾Æ·¡ Á¶°ÇÀ» ÃæÁ·ÇÏ´Â label¿ä¼Ò¸¸ ÀúÀå
+ì´ë¯¸ì§€ì—ì„œ ëŒ€ìƒì„ ì¸ì‹í•˜ê³ ì í•˜ëŠ” ê²½ìš°
+ì•„ë˜ ì¡°ê±´ì„ ì¶©ì¡±í•˜ëŠ” labelìš”ì†Œë§Œ ì €ì¥
+í™•ë¥ ì´ 60% ì´ìƒì¸ ìš”ì†Œë§Œ ëª¨ì•„ í‰ê·  í™•ë¥ ì„ êµ¬í•¨
 
-È®·üÀÌ 60% ÀÌ»óÀÎ ¿ä¼Ò¸¸ ¸ğ¾Æ Æò±Õ È®·üÀ» ±¸ÇÔ
-Æò±Õ È®·üÀÌ 75% ÀÌ»óÀÏ¶§ °³º° È®·üÀÌ 80% ÀÌ»óÀÎ ¿ä¼Ò¸¸ ÀúÀå
-Æò±Õ È®·üÀÌ 75% ¹Ì¸¸ÀÏ¶§ °³º° È®·üÀÌ 70% ÀÌ»óÀÎ ¿ä¼Ò¸¸ ÀúÀå
+í‰ê·  í™•ë¥ ì´ 75% ì´ìƒì¼ë•Œ ê°œë³„ í™•ë¥ ì´ 80% ì´ìƒì¸ ìš”ì†Œë§Œ ì €ì¥
+í‰ê·  í™•ë¥ ì´ 75% ë¯¸ë§Œì¼ë•Œ ê°œë³„ í™•ë¥ ì´ 70% ì´ìƒì¸ ìš”ì†Œë§Œ ì €ì¥
 """ 
 def image_label_detection(data):
     label = []
@@ -99,19 +99,19 @@ def image_label_detection(data):
 
 
 """
-ÀÌ¹ÌÁö¿¡¼­ ±ÛÀÚ¸¦ ÀÎ½ÄÇÏ°íÀÚ ÇÏ´Â °æ¿ì
-textAnnotationÀÇ Ã¹¹øÂ° descriptionÀ» ±×´ë·Î ¹İÈ¯
+ì´ë¯¸ì§€ì—ì„œ ê¸€ìë¥¼ ì¸ì‹í•˜ê³ ì í•˜ëŠ” ê²½ìš°
+textAnnotationì˜ ì²«ë²ˆì§¸ descriptionì„ ê·¸ëŒ€ë¡œ ë°˜í™˜
 """ 
 def image_text_detection(data):
     return data["responses"][0]["textAnnotations"][0]["description"]
 
 
 """
-¿ÜºÎ¿¡¼­ ¿Â ¹ÙÀÌÆ® ÄÚµå¸¦ json ¹®ÀÚ¿­·Î º¯È¯ÇÏ°í - json.dumps
-ÀÌ¸¦ ÆÄÀÌ½ã ³»¿¡¼­ »ç¿ëÇÒ ¶§ json °´Ã¼·Î º¯È¯ÇÏ´Â °úÁ¤ - json.loads
+ì™¸ë¶€ì—ì„œ ì˜¨ ë°”ì´íŠ¸ ì½”ë“œë¥¼ json ë¬¸ìì—´ë¡œ ë³€í™˜í•˜ê³  - json.dumps
+ì´ë¥¼ íŒŒì´ì¬ ë‚´ì—ì„œ ì‚¬ìš©í•  ë•Œ json ê°ì²´ë¡œ ë³€í™˜í•˜ëŠ” ê³¼ì • - json.loads
 
-get_label - label ¿ä¼Ò¸¦ ¹İÈ¯ÇÒ ¶§ »ç¿ë
-get_text - ±ÛÀ» ÀĞÀ»¶§ ÅØ½ºÆ® ¹İÈ¯¿¡ »ç¿ë 
+get_label - label ìš”ì†Œë¥¼ ë°˜í™˜í•  ë•Œ ì‚¬ìš©
+get_text - ê¸€ì„ ì½ì„ë•Œ í…ìŠ¤íŠ¸ ë°˜í™˜ì— ì‚¬ìš© 
 """
 def get_label(local_image_path):
     (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
