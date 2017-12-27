@@ -13,6 +13,9 @@ with open(path.KEY_PATH, 'r') as jsonFile:  # local API key store
     req_url = base_url + key['vision_api-key']
 
 
+"""
+이미지를 웹으로 전송하기 위해 바이트 코드로 변환
+""" 
 def encode_image(image_path, charset):
     with open(image_path, 'rb') as image:
         b64_img = b64encode(image.read())
@@ -20,6 +23,10 @@ def encode_image(image_path, charset):
     return b64_img.decode(charset)
 
 
+"""
+응답받을 json요소의 type을 지정
+웹으로부터 전송받은 코드(req_body)를 json 문자열로 인코딩
+""" 
 def get_response(b64encoded_image):
     req_body = {
       "requests": [
@@ -51,6 +58,14 @@ def get_response(b64encoded_image):
     return headers, body
 
 
+"""
+이미지에서 대상을 인식하고자 하는 경우
+아래 조건을 충족하는 label요소만 저장
+
+확률이 60% 이상인 요소만 모아 평균 확률을 구함
+평균 확률이 75% 이상일때 개별 확률이 80% 이상인 요소만 저장
+평균 확률이 75% 미만일때 개별 확률이 70% 이상인 요소만 저장
+""" 
 def image_label_detection(data):
     label = []
     score = []
@@ -83,10 +98,21 @@ def image_label_detection(data):
     return label
 
 
+"""
+이미지에서 글자를 인식하고자 하는 경우
+textAnnotation의 첫번째 description을 그대로 반환
+""" 
 def image_text_detection(data):
     return data["responses"][0]["textAnnotations"][0]["description"]
 
 
+"""
+외부에서 온 바이트 코드를 json 문자열로 변환하고 - json.dumps
+이를 파이썬 내에서 사용할 때 json 객체로 변환하는 과정 - json.loads
+
+get_label - label 요소를 반환할 때 사용
+get_text - 글을 읽을때 텍스트 반환에 사용 
+"""
 def get_label(local_image_path):
     (headers, body) = get_response(encode_image(local_image_path, 'ascii'))
     data = json.loads(body.decode('utf-8'))
