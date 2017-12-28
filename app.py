@@ -19,9 +19,9 @@ def new_filename():
 
 
 if __name__ == '__main__':
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(24, GPIO.OUT)
+    GPIO.setmode(GPIO.BCM)  # Broadcom chip-specific 기준의 pin 번호
+    GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)  # 버튼 pin
+    GPIO.setup(24, GPIO.OUT)  # LED pin
 
     # rec = Recorder()
     # rec.initialize()
@@ -29,7 +29,6 @@ if __name__ == '__main__':
     start_time = 0
     pushed = False
     is_recording = False
-
 
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
@@ -40,6 +39,11 @@ if __name__ == '__main__':
     p = pyaudio.PyAudio()
 
     try:
+        """
+        반복문 안에서 버튼이 눌렸을 때, 4초간 녹음 후 저장
+        녹음된 파일을 dialog 패키지에서 처리
+        결과값을 Text-to-speech 로 저장 후 재생 
+        """
         while True:
             button_state = GPIO.input(18)
             if not button_state:
@@ -48,7 +52,7 @@ if __name__ == '__main__':
 
                 if not is_recording:
                     stream = p.open(format=FORMAT,
-                                   channels=CHANNELS,
+                                    channels=CHANNELS,
                                     rate=RATE,
                                     input=True,
                                     frames_per_buffer=CHUNK)
@@ -69,14 +73,12 @@ if __name__ == '__main__':
 
                     filename = os.path.join(path.MIC_DIR, new_filename())
 
-
-                    wf = wave.open(filename, 'wb')
-                    wf.setnchannels(CHANNELS)
-                    wf.setsampwidth(p.get_sample_size(FORMAT))
-                    wf.setframerate(RATE)
-                    wf.writeframes(b''.join(frames))
-                    wf.close()
-                    
+                    with wave.open(filename, 'wb') as wf:
+                        wf.setnchannels(CHANNELS)
+                        wf.setsampwidth(p.get_sample_size(FORMAT))
+                        wf.setframerate(RATE)
+                        wf.writeframes(b''.join(frames))
+                        wf.close()
 
                     player = vlc.MediaPlayer(tts(talk_to_dialogflow(filename)))
                     player.play()
@@ -95,4 +97,3 @@ if __name__ == '__main__':
 
     p.terminate()
     GPIO.cleanup()
-
